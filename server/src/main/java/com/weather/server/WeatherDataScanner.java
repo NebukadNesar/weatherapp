@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.weather.data.Forecast;
-import com.weather.data.WeatherRepository;
+import com.weather.repository.WeatherRepository;
 import com.weather.utility.XmlUtility;
 
 @Component

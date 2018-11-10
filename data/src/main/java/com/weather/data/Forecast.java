@@ -19,9 +19,12 @@ public class Forecast {
 	int forcast_id;
 	String date;
 	int index;
-	
+
 	@OneToMany(cascade = CascadeType.ALL)
 	List<DayNight> dayNightRounds;
+
+	public Forecast() {
+	}
 
 	public Forecast(String date, int index) {
 		super();

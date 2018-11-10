@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.weather.data.Forecast;
-import com.weather.data.WeatherRepository;
+import com.weather.repository.WeatherRepository;
 
 @RestController
 public class WeatherClientController {

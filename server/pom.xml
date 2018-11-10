@@ -20,6 +20,11 @@
 			<artifactId>utility</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.weather</groupId>
+			<artifactId>repository</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

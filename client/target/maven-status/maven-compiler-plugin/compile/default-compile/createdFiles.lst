@@ -1,3 +1,4 @@
+com/weather/client/components/ClientResources.class
 com/weather/client/WeatherClientMain.class
 com/weather/client/components/AutoRunner.class
 com/weather/client/controller/WeatherClientController.class
