@@ -4,7 +4,7 @@ public interface CommonData {
 	
 	public static final String request_url = "http://www.ilmateenistus.ee/ilma_andmed/xml/forecast.php?lang=eng";
 
-	public static final String request_period = "* /30 * * * *";
+	public static final String request_period = "0 */30 * ? * *";
 
 	public static final String charsetStandart = "iso-8859-1";
 

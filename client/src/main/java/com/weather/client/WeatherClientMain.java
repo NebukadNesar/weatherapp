@@ -7,12 +7,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = { "com.weather.client", "com.weather.data" })
-@ComponentScan(basePackages = { "com.weather.client", "com.weather.server", "com.weather.repository" })
+@EnableJpaRepositories(basePackages = { "com.weather.repository" })
+@ComponentScan(basePackages = { "com.weather.client", "com.weather.repository", "com.weather.server" })
 @EntityScan(basePackages = { "com.weather.client", "com.weather.data" })
 public class WeatherClientMain {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WeatherClientMain.class, args);
 	}
+	
 }

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.weather.data.Forecast;
 
 @Repository
-public interface WeatherRepository extends JpaRepository<Forecast, String> {
-
+public interface WeatherRepository extends JpaRepository<Forecast, Long> {
+	public Forecast findForecastByDate(String date);
 }
