@@ -37,7 +37,7 @@ public class XmlUtility {
 
 	static {
 		try {
-			weatherUrl = new URL(CommonData.request_url);
+			weatherUrl = new URL(CommonData.REQUEST_URI);
 		} catch (MalformedURLException e) {
 			// some exception occurred
 			e.printStackTrace();
@@ -58,12 +58,12 @@ public class XmlUtility {
 
 			weatherConn = (HttpURLConnection) weatherUrl.openConnection();
 			weatherConn.setRequestMethod(CommonData.GET);
-			weatherConn.setRequestProperty("Content-Type", CommonData.applicationReturnType);
-			weatherConn.setRequestProperty("Accept-Charset", CommonData.charsetStandart);
-			weatherConn.setRequestProperty("User-Agent", CommonData.userAgentProperty);
+			weatherConn.setRequestProperty("Content-Type", CommonData.APPDATA_MIME_TYPE);
+			weatherConn.setRequestProperty("Accept-Charset", CommonData.CHARSET_STANDART);
+			weatherConn.setRequestProperty("User-Agent", CommonData.USER_AGENT_PROPERTY);
 			weatherConn.connect();
 
-			Charset charset = Charset.forName(CommonData.charsetStandart); // for special chars
+			Charset charset = Charset.forName(CommonData.CHARSET_STANDART); // for special chars
 			in = new BufferedReader(new InputStreamReader(weatherConn.getInputStream(), charset));
 
 			File file = new File(DATA_FILE);
@@ -72,7 +72,7 @@ public class XmlUtility {
 
 			String inputLine;
 			while ((inputLine = in.readLine()) != null) {
-				fos.write(inputLine.getBytes(CommonData.charsetStandart));
+				fos.write(inputLine.getBytes(CommonData.CHARSET_STANDART));
 			}
 
 			in.close();
@@ -106,6 +106,7 @@ public class XmlUtility {
 				fc.setDayNightRounds(getPlacesForForecast(nodeList.item(i)));
 				forecasts.add(fc);
 			}
+			file.delete();
 			return forecasts;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,8 +115,6 @@ public class XmlUtility {
 	}
 
 	private ArrayList<DayNight> getPlacesForForecast(Node forecastNode) {
-		System.out.println("\n");
-
 		ArrayList<DayNight> dayNightNodes = new ArrayList<DayNight>();
 		NodeList childredNodes = forecastNode.getChildNodes();
 
@@ -136,7 +135,7 @@ public class XmlUtility {
 			return null;
 
 		DayNight dayNightRoundEntity = new DayNight();
-		dayNightRoundEntity.setDaynight(dayNightRound.equalsIgnoreCase("day") ? 1 : 0);
+		dayNightRoundEntity.setDaynight(dayNightRound.equalsIgnoreCase("day") ?  1 : 0);
 
 		NodeList dayNightRoundChildNodes = dayNightNode.getChildNodes();
 		List<City> places = new ArrayList<City>();
@@ -163,7 +162,7 @@ public class XmlUtility {
 				System.out.println(singlenode.getTextContent().toString());
 				break;
 			case "peipsi":
-				dayNightRoundEntity.setPepsi(singlenode.getTextContent());
+				dayNightRoundEntity.setPeipsi(singlenode.getTextContent());
 				break;
 			case "place":
 				places.add(extractCityInformation(singlenode));

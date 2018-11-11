@@ -8,7 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.weather.data.DayNight;
 import com.weather.data.Forecast;
+import com.weather.repository.DayNightRepository;
+import com.weather.repository.PlacesRepository;
 import com.weather.repository.WeatherRepository;
 import com.weather.utility.CommonData;
 import com.weather.utility.XmlUtility;
@@ -25,18 +28,24 @@ public class WeatherDataScanner implements CommandLineRunner {
 	@Autowired
 	private WeatherRepository weatherRepository;
 
+	@Autowired
+	private DayNightRepository dnRepository;
+
+	@Autowired
+	private PlacesRepository placesRepository;
+
 	@Override
 	public void run(String... args) throws Exception {
 		getWeatherData();
 	}
 
-	@Scheduled(cron = CommonData.request_period)
+	@Scheduled(cron = CommonData.REQUEST_PERIOD)
 	private void getWeatherData() {
-		System.out.println("Test Runner Scanner...");
 		List<Forecast> forecasts = xmlUtilityHelper.getForecasts();
 		try {
 			weatherRepository.deleteAll();
 			weatherRepository.saveAll(forecasts);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

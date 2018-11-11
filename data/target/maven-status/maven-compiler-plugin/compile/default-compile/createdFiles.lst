@@ -1,3 +1,6 @@
+com/weather/publicdata/PublicCity.class
 com/weather/data/Forecast.class
 com/weather/data/DayNight.class
 com/weather/data/City.class
+com/weather/publicdata/PublicForecast.class
+com/weather/publicdata/PublicDayNight.class

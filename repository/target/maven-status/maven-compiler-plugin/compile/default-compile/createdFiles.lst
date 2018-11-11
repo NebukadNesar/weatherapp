@@ -1,3 +1,4 @@
+com/weather/repository/sqlwrappers/SqlWrapperUtility.class
 com/weather/repository/DayNightRepository.class
 com/weather/repository/WeatherRepository.class
 com/weather/repository/PlacesRepository.class

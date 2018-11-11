@@ -1,5 +1,6 @@
 package com.weather.data;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,10 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "forecast_table")
-public class Forecast {
+public class Forecast implements Serializable {
+
+	/**
+	 * 
+	 */
+	@Transient private static final long serialVersionUID = 7118114416475520062L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,12 +31,21 @@ public class Forecast {
 	List<DayNight> dayNightRounds;
 
 	public Forecast() {
+		super();
 	}
 
 	public Forecast(String date, int index) {
 		super();
 		this.date = date;
 		this.index = index;
+	}
+
+	public Forecast(int forcast_id, String date, int index, List<DayNight> dayNightRounds) {
+		super();
+		this.forcast_id = forcast_id;
+		this.date = date;
+		this.index = index;
+		this.dayNightRounds = dayNightRounds;
 	}
 
 	public String getDate() {

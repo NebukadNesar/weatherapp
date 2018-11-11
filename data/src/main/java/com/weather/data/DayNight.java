@@ -1,5 +1,6 @@
 package com.weather.data;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,24 +13,31 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "daynight_table")
-public class DayNight {
+public class DayNight implements Serializable{
 
+	/**
+	 * 
+	 */
+	@Transient private static final long serialVersionUID = -7741550076362971003L;
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	int daynight_id;
 	String phenomenon;
 	int tempmin;
 	int tempmax;
-
+	@Lob
 	String description;
 
 	@Lob
 	String sea;
-
-	String pepsi;
+	@Lob
+	String peipsi;
 	int daynight; // 1 - day, 0 - night
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -59,8 +67,25 @@ public class DayNight {
 		this.tempmax = tempmax;
 		this.description = description;
 		this.sea = sea;
-		this.pepsi = pepsi;
+		this.peipsi = pepsi;
 		this.daynight = daynight;
+	}
+
+	
+	
+	public DayNight(int daynight_id, String phenomenon, int tempmin, int tempmax, String description, String sea,
+			String peipsi, int daynight, List<City> cities, Forecast forecast) {
+		super();
+		this.daynight_id = daynight_id;
+		this.phenomenon = phenomenon;
+		this.tempmin = tempmin;
+		this.tempmax = tempmax;
+		this.description = description;
+		this.sea = sea;
+		this.peipsi = peipsi;
+		this.daynight = daynight;
+		this.cities = cities;
+		this.forecast = forecast;
 	}
 
 	public Forecast getForecast() {
@@ -95,12 +120,12 @@ public class DayNight {
 		this.sea = sea;
 	}
 
-	public String getPepsi() {
-		return pepsi;
+	public String getPeipsi() {
+		return peipsi;
 	}
 
-	public void setPepsi(String pepsi) {
-		this.pepsi = pepsi;
+	public void setPeipsi(String peipsi) {
+		this.peipsi = peipsi;
 	}
 
 	public int getTempmin() {

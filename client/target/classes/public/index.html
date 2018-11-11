@@ -1,8 +1,203 @@
-!DOCTYPE html>
 <html>
-<head>
-   <title>Weather Forecast</title>
-</head>
-<body>
-</body>
+   <title>Weather app </title>
+   <body>
+      <style>
+         table {
+         	 border: 2px solid black;
+	         border-collapse: collapse;
+         }
+         table, tr th{
+         	 border: 1px solid black;
+         }
+         table, th{
+         	min-width: 100px;
+         }
+         a.colorful{
+	         color: blue;
+         }
+         .Day{
+         	background: white;
+         }
+         .Night{
+         	background: gray;
+         }
+      </style>
+      <div id="root">
+         <div class="weather-class">
+            <select id="select-date" name="date-select">
+               <option value="all">All</option>
+            </select>
+            <input type="text" name="City name" id="inputfield">
+            <button class="btn btn-lg btn-primary btn-block" onclick="userAction()" type="submit">Get Forecast</button>
+         </div>
+         <div id="city-names">
+         </div>
+         <div class="result">
+            <table id="forecast-result">
+	            <thead>
+	               <tr>
+	                  <th>Day/Night</th>
+	                  <th>description</th>
+	                  <th>peipsi</th>
+	                  <th>phenomenon</th>
+	                  <th>sea</th>
+	                  <th>tempmax</th>
+	                  <th>tempmin</th>
+	                  <th>cityphenomenon</th>
+	                  <th>citytempmin</th>
+	               </tr>
+	            </thead>
+            </table>
+         </div>
+      </div>
+
+      <!-- javascript part-->
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+      <script type="text/javascript">
+         $(document).ready(function() {
+         	populateDateList();
+         	populateCityList(); 
+          });
+         
+           const populateDateList = async () => {
+         	const response = await fetch('http://localhost:5544/weather/getforecastdates', {
+         	    method: 'GET', 
+         	    headers:{
+         	      'Content-Type': 'application/json'
+         	    }
+         	  });
+         	  const dates = await response.json(); //extract JSON from the http response
+         	  var selectOptionObject = document.getElementById("select-date");
+         	  for (var i = dates.length - 1; i >= 0; i--) {
+         	  	var date = dates[i]; 
+         		var optionTemplate = document.createElement('option')
+         	  	optionTemplate.setAttribute("value", date);
+         		optionTemplate.innerHTML=date; 
+         	  	selectOptionObject.append(optionTemplate);
+         	  }
+         	}
+         
+          	  const populateCityList = async () => {
+         	const response = await fetch('http://localhost:5544/weather/getavailablecitynames', {
+         	    method: 'GET', 
+         	    headers:{
+         	      'Content-Type': 'application/json'
+         	    }
+         	  });
+         	  const cityNames = await response.json(); //extract JSON from the http response
+         	  console.log(cityNames);
+         	  var availableCityNames = document.getElementById("city-names");
+         	  for (var i = cityNames.length - 1; i >= 0; i--) {
+         	  	var cityName = cityNames[i]; 
+         	  	var root = document.createElement('div');
+         	  	
+         
+         		var addme = document.createElement('a');
+         	 
+         		addme.setAttribute("url","#");
+         		addme.setAttribute("class","colorful");
+         		addme.innerHTML = cityName;
+         		addme.setAttribute("value", cityName);
+         		addme.setAttribute("onclick", "setSelectedCityName(this)");
+         			addme.setAttribute("title", "select " + cityName);
+         
+         	  	root.append(addme);
+         	  	availableCityNames.append(root);
+         	  }
+         	}
+         
+          function setSelectedCityName(clickedEvent){
+          	var cityName = clickedEvent.getAttribute("value");
+          	console.log(clickedEvent.value);
+          	document.getElementById("inputfield").value = cityName;
+          }
+         
+         const userAction = async () => {
+           var option = document.getElementById("select-date");
+           var selectedDate = option.options[option.selectedIndex].value;
+           var cityName = document.getElementById("inputfield").value;
+           console.log(document.getElementById("inputfield").value);
+           var url = new URL("http://localhost:5544/weather/getcity");
+          
+           var params = {date:selectedDate, cityName:cityName};
+           Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+           console.log(url);
+           const response = await fetch(url, {
+             method: 'GET',
+             headers:{
+               'Content-Type': 'application/json'
+             }
+           });
+           const respnse = await response.json(); //extract JSON from the http response
+           displayForecastResultForCity(respnse);
+         }
+         
+         function displayForecastResultForCity(forecast){
+         	var forecastObject = document.getElementById("forecast-result");
+         	$(".tobedeleted").remove();
+         	for (var i = forecast.dayNightRounds.length - 1; i >= 0; i--) {
+         		var round = forecast.dayNightRounds[i];
+         		var description, 
+         			peipsi,
+         			phenomenon,
+         			sea,
+         			tempmax,
+         			tempmin;
+         
+         		var sun;
+         		if (round.daynight === 1) {
+         			sun = "Day";
+         		}else{
+         			sun = "Night";
+         		}
+         
+         		round.daynight = sun;
+         		forecastObject.append(addInformationRow(round));
+         	}
+          }
+
+         function addInformationRow(round){
+         	 var tr = document.createElement("tr");
+         	 tr.setAttribute("class","tobedeleted");
+        	 var daynight = document.createElement("th");
+        	 var description = document.createElement("th");
+        	 var peipsi = document.createElement("th");
+        	 var phenomenon = document.createElement("th");
+        	 var sea = document.createElement("th");
+        	 var tempmin = document.createElement("th");
+        	 var tempmax = document.createElement("th");
+        	 var cityphenomenon = document.createElement("th");
+        	 var citytempmin = document.createElement("th");
+
+        	 daynight.innerHTML = round.daynight;
+        	 daynight.setAttribute("class", round.daynight);
+        	 description.innerHTML = round.description;
+        	 peipsi.innerHTML = round.peipsi;
+        	 phenomenon.innerHTML = round.phenomenon;
+        	 sea.innerHTML = round.sea;
+        	 tempmin.innerHTML = round.tempmin;
+        	 tempmax.innerHTML = round.tempmax;
+        	 
+        	 if(round.cities != undefined && round.cities.length > 0){
+        	 	citytempmin.innerHTML = round.cities[0].tempmin;
+        	 	cityphenomenon.innerHTML = round.cities[0].phenomenon;
+        	 }else{
+        	 	citytempmin.innerHTML = "*";
+        	 	cityphenomenon.innerHTML = "*"
+        	 }
+        	 tr.append(daynight);
+        	 tr.append(description);
+        	 tr.append(peipsi);
+        	 tr.append(phenomenon);
+        	 tr.append(sea);
+        	 tr.append(tempmin);
+        	 tr.append(tempmax);
+        	 tr.append(cityphenomenon);
+        	 tr.append(citytempmin);
+        	 console.log(tr);
+
+        	 return tr;
+         }
+      </script>
+   </body>
 </html>

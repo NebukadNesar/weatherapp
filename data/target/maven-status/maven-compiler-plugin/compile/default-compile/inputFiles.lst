@@ -1,3 +1,6 @@
 /home/burhanc/Documents/workspace-maven/app/data/src/main/java/com/weather/data/DayNight.java
+/home/burhanc/Documents/workspace-maven/app/data/src/main/java/com/weather/publicdata/PublicForecast.java
+/home/burhanc/Documents/workspace-maven/app/data/src/main/java/com/weather/publicdata/PublicCity.java
+/home/burhanc/Documents/workspace-maven/app/data/src/main/java/com/weather/publicdata/PublicDayNight.java
 /home/burhanc/Documents/workspace-maven/app/data/src/main/java/com/weather/data/Forecast.java
 /home/burhanc/Documents/workspace-maven/app/data/src/main/java/com/weather/data/City.java
