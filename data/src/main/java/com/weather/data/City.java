@@ -97,10 +97,13 @@ public class City implements Serializable{
 		this.tempmin = tempmin;
 	}
 
+
 	@Override
 	public String toString() {
 		return "City [place_id=" + place_id + ", name=" + name + ", phenomenon=" + phenomenon + ", tempmin=" + tempmin
-				+ "]\n";
+				+ ", dayNight=" + dayNight.getDayNight_id() + "]";
 	}
+
+ 
 
 }
