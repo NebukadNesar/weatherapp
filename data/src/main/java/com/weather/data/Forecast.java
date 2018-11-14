@@ -19,9 +19,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "forecast")
 public class Forecast implements Serializable {
 
-	/**
-	 * 
-	 */
 	@Transient private static final long serialVersionUID = 7118114416475520062L;
 
 	@Id

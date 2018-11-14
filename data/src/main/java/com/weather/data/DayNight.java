@@ -39,7 +39,7 @@ public class DayNight implements Serializable {
 	int tempmax;
 
 	@Lob
-	@XmlAttribute(name = "description")
+	@XmlAttribute(name = "text")
 	String description;
 
 	@Lob
