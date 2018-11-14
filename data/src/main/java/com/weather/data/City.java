@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * <place> <name>Türi</name> <phenomenon>Fog</phenomenon> <tempmin>3</tempmin>
@@ -17,19 +19,21 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "places_table")
-public class City implements Serializable{
+@XmlRootElement(name = "place")
+public class City implements Serializable {
 
-	/**
-	 * 
-	 */
-	@Transient private static final long serialVersionUID = -61765941675821643L;
-	
-	
+	@Transient
+	private static final long serialVersionUID = -61765941675821643L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	int place_id;
+
+	@XmlAttribute(name = "name")
 	public String name;
+	@XmlAttribute(name = "phenomenon")
 	public String phenomenon;
+	@XmlAttribute(name = "tempmin")
 	public int tempmin;
 
 	@ManyToOne
@@ -39,7 +43,6 @@ public class City implements Serializable{
 	public City() {
 		super();
 	}
-	
 
 	public City(String name, String phenomenon, int tempmin) {
 		super();
@@ -97,13 +100,10 @@ public class City implements Serializable{
 		this.tempmin = tempmin;
 	}
 
-
 	@Override
 	public String toString() {
 		return "City [place_id=" + place_id + ", name=" + name + ", phenomenon=" + phenomenon + ", tempmin=" + tempmin
 				+ ", dayNight=" + dayNight.getDayNight_id() + "]";
 	}
-
- 
 
 }

@@ -11,9 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "forecast_table")
+@XmlRootElement(name = "forecast")
 public class Forecast implements Serializable {
 
 	/**
@@ -24,8 +27,11 @@ public class Forecast implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	int forcast_id;
+	
+	@XmlAttribute(name = "date")
 	String date;
-	int index;
+	
+	int index; //private static field and we can increase it at any time of forecast object creation called..
 
 	@OneToMany(cascade = CascadeType.ALL)
 	List<DayNight> dayNightRounds;

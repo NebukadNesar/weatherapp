@@ -14,30 +14,42 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "daynight_table")
-public class DayNight implements Serializable{
+@XmlRootElement(name = "day")
+public class DayNight implements Serializable {
 
-	/**
-	 * 
-	 */
-	@Transient private static final long serialVersionUID = -7741550076362971003L;
-	
-	
+	@Transient
+	private static final long serialVersionUID = -7741550076362971003L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	int daynight_id;
+
+	@XmlAttribute(name = "phenomenon")
 	String phenomenon;
+
+	@XmlAttribute(name = "tempmin")
 	int tempmin;
+
+	@XmlAttribute(name = "tempmax")
 	int tempmax;
+
 	@Lob
+	@XmlAttribute(name = "description")
 	String description;
 
 	@Lob
+	@XmlAttribute(name = "sea")
 	String sea;
+
 	@Lob
+	@XmlAttribute(name = "peipsi")
 	String peipsi;
+
 	int daynight; // 1 - day, 0 - night
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -71,8 +83,6 @@ public class DayNight implements Serializable{
 		this.daynight = daynight;
 	}
 
-	
-	
 	public DayNight(int daynight_id, String phenomenon, int tempmin, int tempmax, String description, String sea,
 			String peipsi, int daynight, List<City> cities, Forecast forecast) {
 		super();
