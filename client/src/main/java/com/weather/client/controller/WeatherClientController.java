@@ -1,11 +1,14 @@
 package com.weather.client.controller;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,10 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.weather.data.Forecast;
-import com.weather.publicdata.PublicCity;
-import com.weather.publicdata.PublicDayNight;
+import com.weather.data.Place;
+import com.weather.publicdata.PublicDay;
 import com.weather.publicdata.PublicForecast;
-import com.weather.repository.DayNightRepository;
+import com.weather.publicdata.PublicNight;
+import com.weather.publicdata.PublicPlace;
 import com.weather.repository.PlacesRepository;
 import com.weather.repository.WeatherRepository;
 import com.weather.utility.controller.PublicConverter;
@@ -32,9 +36,6 @@ public class WeatherClientController {
 
 	@Autowired
 	private PlacesRepository placesRespository;
-
-	@Autowired
-	private DayNightRepository dayNightRepository;
 
 	@Transactional
 	@RequestMapping("/getforecastdates")
@@ -54,10 +55,11 @@ public class WeatherClientController {
 
 	@Transactional
 	@GetMapping("/getcity")
-	public PublicForecast getWeatherDataForACity(@RequestParam String date, @RequestParam String cityName) {
+	public PublicForecast getWeatherDataForACity(@RequestParam String date, @RequestParam String cityName)
+			throws JAXBException {
 		Forecast result = weatherRepository.findForecastByDate(date);
-
 		PublicForecast forecast = convert(result);
+		System.out.println("Reesult: "+ forecast);
 		if (forecast == null) {
 			return null;
 		}
@@ -68,43 +70,22 @@ public class WeatherClientController {
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("Exception occured..." + e.getMessage());
 		}
+		System.out.println(decodedCityName);
 
-		PublicCity cityday = new PublicCity();
-		PublicCity citynight = new PublicCity();
+//		PublicPlace cityday = new PublicPlace();
+//		PublicPlace citynight = new PublicPlace();
+//
+//		PublicDay pDay = forecast.getPday();
+//		PublicNight pNight = forecast.getPnight();
 
-		List<PublicDayNight> dn = forecast.getDayNightRounds();
-		if (dn.size() > 0) {
-			for (int i = 0; i < dn.size(); i++) {
-				List<PublicCity> cities = dn.get(i).getCities();
-				for (PublicCity c : cities) {
-					if (c.getName().equalsIgnoreCase(decodedCityName)) {
-						if (dn.get(i).getDaynight() == 1) {
-							cityday = c;
-							cities.clear();
-							dn.get(i).setCities(new ArrayList<>());
-							dn.get(i).getCities().add(cityday);
-							break;
-						} else {
-							citynight = c;
-							cities.clear();
-							dn.get(i).setCities(new ArrayList<>());
-							dn.get(i).getCities().add(citynight);
-							cities.clear();
-							break;
-						}
-					}
-				}
-			}
-		}
-
+		//todo
 		return forecast;
 
 	}
 
 	private PublicForecast convert(Forecast fc) {
 		PublicConverter pconverter = new PublicConverter();
-		return pconverter.forecastTo(fc);
-
+		return pconverter.convertFrom(fc);
 	}
 
 }

@@ -4,9 +4,7 @@ import java.util.List;
 
 import javax.persistence.Lob;
 
-import com.weather.data.City;
-
-public class PublicDayNight {
+public class PublicDay {
 
 	int daynight_id;
 	String phenomenon;
@@ -22,16 +20,13 @@ public class PublicDayNight {
 	String peipsi;
 	int daynight; // 1 - day, 0 - night
 
-	List<PublicCity> cities;
-	
-	
+	List<PublicPlace> cities;
 
-	public PublicDayNight() {
-		super();
+	public PublicDay() {
 	}
 
-	public PublicDayNight(int daynight_id, String phenomenon, int tempmin, int tempmax, String description, String sea,
-			String peipsi, int daynight, List<PublicCity> cities) {
+	public PublicDay(int daynight_id, String phenomenon, int tempmin, int tempmax, String description, String sea,
+			String peipsi, int daynight, List<PublicPlace> cities) {
 		super();
 		this.daynight_id = daynight_id;
 		this.phenomenon = phenomenon;
@@ -41,6 +36,18 @@ public class PublicDayNight {
 		this.sea = sea;
 		this.peipsi = peipsi;
 		this.daynight = daynight;
+		this.cities = cities;
+	}
+
+	public PublicDay(String phenomenon, int tempmin, int tempmax, String description, String sea, String peipsi,
+			List<PublicPlace> cities) {
+		super();
+		this.phenomenon = phenomenon;
+		this.tempmin = tempmin;
+		this.tempmax = tempmax;
+		this.description = description;
+		this.sea = sea;
+		this.peipsi = peipsi;
 		this.cities = cities;
 	}
 
@@ -108,12 +115,19 @@ public class PublicDayNight {
 		this.daynight = daynight;
 	}
 
-	public List<PublicCity> getCities() {
+	public List<PublicPlace> getCities() {
 		return cities;
 	}
 
-	public void setCities(List<PublicCity> cities) {
+	public void setCities(List<PublicPlace> cities) {
 		this.cities = cities;
+	}
+
+	@Override
+	public String toString() {
+		return "PublicDay [daynight_id=" + daynight_id + ", phenomenon=" + phenomenon + ", tempmin=" + tempmin
+				+ ", tempmax=" + tempmax + ", description=" + description + ", sea=" + sea + ", peipsi=" + peipsi
+				+ ", daynight=" + daynight + ", cities=" + cities + "]";
 	}
 
 }

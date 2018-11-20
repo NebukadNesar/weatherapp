@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.weather.data.Forecast;
-import com.weather.repository.DayNightRepository;
 import com.weather.repository.PlacesRepository;
 import com.weather.repository.WeatherRepository;
 import com.weather.utility.CommonData;
@@ -28,9 +27,6 @@ public class WeatherDataScanner implements CommandLineRunner {
 	private WeatherRepository weatherRepository;
 
 	@Autowired
-	private DayNightRepository dnRepository;
-
-	@Autowired
 	private PlacesRepository placesRepository;
 
 	@Override
@@ -44,9 +40,7 @@ public class WeatherDataScanner implements CommandLineRunner {
 		try {
 			weatherRepository.deleteAll();
 			placesRepository.deleteAll();
-			dnRepository.deleteAll();
-			rearrangerelations(forecasts); 
-
+			rearrangerelations(forecasts);
 			weatherRepository.saveAll(forecasts);
 
 		} catch (Exception e) {
@@ -54,17 +48,35 @@ public class WeatherDataScanner implements CommandLineRunner {
 		}
 	}
 
+	// arrange the relations before saving database
 	private void rearrangerelations(List<Forecast> forecasts) {
 		forecasts.stream().forEach(forecast -> {
-			if (forecast.getDayNightRounds() != null && forecast.getDayNightRounds().size() > 0) {
-				forecast.getDayNightRounds().stream().forEach(daynight -> {
-					daynight.setForecast(forecast);
-					if (daynight.getCities() != null) {
-						daynight.getCities().stream().forEach(city -> {
-							city.setDayNight(daynight);
-						});
-					}
-				});
+			if (forecast.getDay() != null) {
+				if (forecast.getDay().getPlaces() != null) {
+					forecast.getDay().getPlaces().stream().forEach(place -> {
+						place.setDay(forecast.getDay());
+					});
+				}
+				if (forecast.getDay().getWinds() != null) {
+					forecast.getDay().getWinds().stream().forEach(wind -> {
+						wind.setDay(forecast.getDay());
+					});
+				}
+
+				forecast.getDay().setForecast(forecast);
+			}
+			if (forecast.getNight() != null) {
+				if (forecast.getNight().getPlaces() != null) {
+					forecast.getNight().getPlaces().stream().forEach(place -> {
+						place.setNight(forecast.getNight());
+					});
+				}
+				if (forecast.getNight().getWinds() != null) {
+					forecast.getNight().getWinds().stream().forEach(wind -> {
+						wind.setNight(forecast.getNight());
+					});
+				}
+				forecast.getNight().setForecast(forecast);
 			}
 		});
 	}

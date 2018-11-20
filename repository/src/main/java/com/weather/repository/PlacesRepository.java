@@ -6,15 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.weather.data.City;
+import com.weather.data.Place;
 
 @Repository
-public interface PlacesRepository extends JpaRepository<City, String> {
+public interface PlacesRepository extends JpaRepository<Place, String> {
 
-	@Query("select distinct name from City")
+	@Query("Select distinct name from Place")
 	public List<String> findAllCityNames();
-	
-//	@Query("select fc.date, place.name, place.tempmin, dn.tempmin, dn.sea, dn.peipsi, dn.description ")
-	public List<Object> findCityByName(String city);
-
 }

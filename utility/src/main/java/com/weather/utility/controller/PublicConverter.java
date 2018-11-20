@@ -1,13 +1,16 @@
 package com.weather.utility.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import com.weather.data.City;
-import com.weather.data.DayNight;
+import com.weather.data.Day;
 import com.weather.data.Forecast;
-import com.weather.publicdata.PublicCity;
-import com.weather.publicdata.PublicDayNight;
+import com.weather.data.Night;
+import com.weather.data.Place;
+import com.weather.publicdata.PublicDay;
 import com.weather.publicdata.PublicForecast;
+import com.weather.publicdata.PublicNight;
+import com.weather.publicdata.PublicPlace;
 
 /**
  * Class converts database related objects to public objects which is safe in
@@ -19,44 +22,49 @@ import com.weather.publicdata.PublicForecast;
  */
 public class PublicConverter {
 
-	public PublicCity cityTo(City city) {
-		if (city == null)
-			return null;
-		return new PublicCity(city.getPlace_id(), city.getName(), city.getPhenomenon(), city.tempmin);
-	}
+	public PublicForecast convertFrom(Forecast fc) {
 
-	public PublicDayNight dayNightTo(DayNight dn) {
-
-		if (dn == null)
+		if (fc == null) {
 			return null;
-		
-		ArrayList<PublicCity> publicCities = null;
-		if (dn.getCities() != null) {
-			publicCities = new ArrayList<PublicCity>();
-			for (int i = 0; i < dn.getCities().size(); i++) {
-				publicCities.add(cityTo(dn.getCities().get(i)));
-			}
 		}
 
-		return new PublicDayNight(dn.getDaynight(), dn.getPhenomenon(), dn.getTempmin(), dn.getTempmax(),
-				dn.getDescription(), dn.getSea(), dn.getPeipsi(), dn.getDaynight(), publicCities);
+		PublicForecast pforecast = new PublicForecast(fc.getDate(), convertDay(fc.getDay()),
+				convertNight(fc.getNight()));
+
+		return pforecast;
 
 	}
 
-	public PublicForecast forecastTo(Forecast fc) {
-		if (fc == null)
-			return null;
+	private PublicNight convertNight(Night night) {
 
-		ArrayList<PublicDayNight> publicDaynights = null;
-		if (fc.getDayNightRounds() != null) {
-			publicDaynights = new ArrayList<PublicDayNight>();
-			for (int i = 0; i < fc.getDayNightRounds().size(); i++) {
-				publicDaynights.add(dayNightTo(fc.getDayNightRounds().get(i)));
-			}
+		if (night == null) {
+			return null;
 		}
 
-		return new PublicForecast(fc.getForcast_id(), fc.getDate(), fc.getIndex(), publicDaynights);
+		return new PublicNight(night.getPhenomenon(), night.getTempmin(), night.getTempmax(), night.getText(),
+				night.getSea(), night.getPeipsi(), convertPlaces(night.getPlaces()));
+	}
 
+	private List<PublicPlace> convertPlaces(List<Place> places) {
+		if (places == null || places.size() == 0) {
+			return null;
+		}
+		List<PublicPlace> pplaces = new ArrayList<>();
+		places.stream().forEach(place -> {
+			pplaces.add(new PublicPlace(place.getName(), place.getPhenomenon(), place.getTempmin()));
+		});
+
+		return pplaces;
+	}
+	
+
+	private PublicDay convertDay(Day day) {
+		if (day == null) {
+			return null;
+		}
+
+		return new PublicDay(day.getPhenomenon(), day.getTempmin(), day.getTempmax(), day.getText(), day.getSea(),
+				day.getPeipsi(), convertPlaces(day.getPlaces()));
 	}
 
 }

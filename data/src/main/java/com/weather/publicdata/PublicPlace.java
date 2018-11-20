@@ -1,24 +1,21 @@
 package com.weather.publicdata;
 
-public class PublicCity {
+public class PublicPlace {
 
-	int place_id;
+	public int place_id;
 	public String name;
 	public String phenomenon;
 	public int tempmin;
 
-	public PublicCity() {
+	public PublicPlace() {
 	}
 
-	
-	public PublicCity(int place_id, String name, String phenomenon, int tempmin) {
+	public PublicPlace(String name, String phenomenon, int tempmin) {
 		super();
-		this.place_id = place_id;
 		this.name = name;
 		this.phenomenon = phenomenon;
 		this.tempmin = tempmin;
 	}
-
 
 	public int getPlace_id() {
 		return place_id;
@@ -50,6 +47,12 @@ public class PublicCity {
 
 	public void setTempmin(int tempmin) {
 		this.tempmin = tempmin;
+	}
+
+	@Override
+	public String toString() {
+		return "PublicPlace [place_id=" + place_id + ", name=" + name + ", phenomenon=" + phenomenon + ", tempmin="
+				+ tempmin + "]";
 	}
 
 }

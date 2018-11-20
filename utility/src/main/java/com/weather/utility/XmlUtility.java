@@ -8,20 +8,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.weather.data.City;
-import com.weather.data.DayNight;
 import com.weather.data.Forecast;
+import com.weather.data.Forecasts;
 
 /**
  * read requested url and get xml data </br>
@@ -88,116 +82,20 @@ public class XmlUtility {
 	}
 
 	private List<Forecast> generateWeatherDataFromXml(String dataFilePath) {
+		File file = new File(dataFilePath);
+		JAXBContext jaxbContext;
+		Forecasts forecasts = null;
 		try {
-			File file = new File(dataFilePath);
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = null;
-
-			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(file);
-			doc.getDocumentElement().normalize();
-			Element forecastElement = doc.getDocumentElement();
-			NodeList nodeList = forecastElement.getElementsByTagName("forecast");
-
-			List<Forecast> forecasts = new ArrayList<Forecast>();
-
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				Forecast fc = new Forecast(nodeList.item(i).getAttributes().getNamedItem("date").getTextContent(), i);
-				fc.setDayNightRounds(getPlacesForForecast(nodeList.item(i)));
-				forecasts.add(fc);
-			}
-			file.delete();
-			return forecasts;
-		} catch (Exception e) {
+			jaxbContext = JAXBContext.newInstance(Forecasts.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			forecasts = (Forecasts) jaxbUnmarshaller.unmarshal(file);
+		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
-		return null;
-	}
 
-	private ArrayList<DayNight> getPlacesForForecast(Node forecastNode) {
-		ArrayList<DayNight> dayNightNodes = new ArrayList<DayNight>();
-		NodeList childredNodes = forecastNode.getChildNodes();
-
-		for (int i = 0; i < childredNodes.getLength(); i++) {
-			String dayNightNodeName = childredNodes.item(i).getNodeName();
-			if (dayNightNodeName.equalsIgnoreCase("day") || dayNightNodeName.equalsIgnoreCase("night")) {
-				DayNight dn = convertW3CNodeTo(childredNodes.item(i), dayNightNodeName);
-				dayNightNodes.add(dn);
-			}
-		}
-
-		return dayNightNodes;
-	}
-
-	public static DayNight convertW3CNodeTo(Node dayNightNode, String dayNightRound) {
-
-		if (dayNightNode == null)
-			return null;
-
-		DayNight dayNightRoundEntity = new DayNight();
-		dayNightRoundEntity.setDaynight(dayNightRound.equalsIgnoreCase("day") ?  1 : 0);
-
-		NodeList dayNightRoundChildNodes = dayNightNode.getChildNodes();
-		List<City> places = new ArrayList<City>();
-
-		for (int i = 0; i < dayNightRoundChildNodes.getLength(); i++) {
-			Node singlenode = dayNightRoundChildNodes.item(i);
-			switch (singlenode.getNodeName()) {
-			case "phenomenon":
-				dayNightRoundEntity.setPhenomenon(singlenode.getTextContent());
-				break;
-			case "tempmin":
-				int tempmin = Integer.parseInt(singlenode.getTextContent());
-				dayNightRoundEntity.setTempmin(tempmin);
-				break;
-			case "tempmax":
-				int tempmax = Integer.parseInt(singlenode.getTextContent());
-				dayNightRoundEntity.setTempmax(tempmax);
-				break;
-			case "text":
-				dayNightRoundEntity.setDescription(singlenode.getTextContent());
-				break;
-			case "sea":
-				dayNightRoundEntity.setSea(singlenode.getTextContent());
-				System.out.println(singlenode.getTextContent().toString());
-				break;
-			case "peipsi":
-				dayNightRoundEntity.setPeipsi(singlenode.getTextContent());
-				break;
-			case "place":
-				places.add(extractCityInformation(singlenode));
-				break;
-			default:
-				break;
-			}
-		}
-		if (places.size() > 0)
-			dayNightRoundEntity.setCities(places);
-		return dayNightRoundEntity;
+		System.out.println(forecasts.getForecasts());
+		return forecasts.getForecasts();
 
 	}
 
-	private static City extractCityInformation(Node singleNode) {
-		City city = new City();
-		NodeList placeAttributes = singleNode.getChildNodes();
-
-		for (int i = 0; i < placeAttributes.getLength(); i++) {
-			switch (placeAttributes.item(i).getNodeName()) {
-			case "name":
-				city.setName(placeAttributes.item(i).getTextContent());
-				break;
-			case "phenomenon":
-				city.setPhenomenon(placeAttributes.item(i).getTextContent());
-				break;
-			case "tempmin":
-				int tempmin = Integer.parseInt(placeAttributes.item(i).getTextContent());
-				city.setTempmin(tempmin);
-				break;
-
-			default:
-				break;
-			}
-		}
-		return city;
-	}
 }

@@ -1,27 +1,26 @@
 package com.weather.publicdata;
 
-import java.util.List;
-
-import com.weather.data.DayNight;
-
 public class PublicForecast {
+
 	int forcast_id;
 	String date;
-	int index;
 
-	List<PublicDayNight> dayNightRounds;
+	PublicDay pday;
+	PublicNight pnight;
 
-	public PublicForecast() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public PublicForecast(int forcast_id, String date, int index, List<PublicDayNight> dayNightRounds) {
+	public PublicForecast(int forcast_id, String date, PublicDay pday, PublicNight pnight) {
 		super();
 		this.forcast_id = forcast_id;
 		this.date = date;
-		this.index = index;
-		this.dayNightRounds = dayNightRounds;
+		this.pday = pday;
+		this.pnight = pnight;
+	}
+
+	public PublicForecast(String date, PublicDay pday, PublicNight pnight) {
+		super();
+		this.date = date;
+		this.pday = pday;
+		this.pnight = pnight;
 	}
 
 	public int getForcast_id() {
@@ -40,20 +39,26 @@ public class PublicForecast {
 		this.date = date;
 	}
 
-	public int getIndex() {
-		return index;
+	public PublicDay getPday() {
+		return pday;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setPday(PublicDay pday) {
+		this.pday = pday;
 	}
 
-	public List<PublicDayNight> getDayNightRounds() {
-		return dayNightRounds;
+	public PublicNight getPnight() {
+		return pnight;
 	}
 
-	public void setDayNightRounds(List<PublicDayNight> dayNightRounds) {
-		this.dayNightRounds = dayNightRounds;
+	public void setPnight(PublicNight pnight) {
+		this.pnight = pnight;
+	}
+
+	@Override
+	public String toString() {
+		return "PublicForecast [forcast_id=" + forcast_id + ", date=" + date + ", pday=" + pday + ", pnight=" + pnight
+				+ "]\n";
 	}
 
 }

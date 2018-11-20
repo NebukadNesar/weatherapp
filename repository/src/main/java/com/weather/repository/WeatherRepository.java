@@ -15,5 +15,5 @@ public interface WeatherRepository extends JpaRepository<Forecast, String> {
 	public List<String> findAllDates();
 
 	public Forecast findForecastByDate(String date);
-	
+
 }

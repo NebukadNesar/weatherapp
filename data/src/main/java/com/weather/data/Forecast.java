@@ -1,54 +1,51 @@
 package com.weather.data;
 
-import java.io.Serializable;
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "forecast_table")
+@Table(name = "forecast")
 @XmlRootElement(name = "forecast")
-public class Forecast implements Serializable {
-
-	@Transient private static final long serialVersionUID = 7118114416475520062L;
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Forecast {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	int forcast_id;
+	int forecast_id;
 	
-	@XmlAttribute(name = "date")
+	@XmlAttribute
 	String date;
-	
-	int index; //private static field and we can increase it at any time of forecast object creation called..
 
-	@OneToMany(cascade = CascadeType.ALL)
-	List<DayNight> dayNightRounds;
+	@XmlElement
+	@OneToOne(cascade = CascadeType.ALL)
+	Day day;
+
+	@XmlElement
+	@OneToOne(cascade = CascadeType.ALL)
+	Night night;
 
 	public Forecast() {
-		super();
 	}
 
-	public Forecast(String date, int index) {
-		super();
+	public Forecast(String date, Day day, Night night) {
 		this.date = date;
-		this.index = index;
+		this.day = day;
+		this.night = night;
 	}
 
-	public Forecast(int forcast_id, String date, int index, List<DayNight> dayNightRounds) {
-		super();
-		this.forcast_id = forcast_id;
-		this.date = date;
-		this.index = index;
-		this.dayNightRounds = dayNightRounds;
+	@Override
+	public String toString() {
+		return "Forecast{" + "date='" + date + '\'' + ", day=" + day + ", night=" + night + "}\n";
 	}
 
 	public String getDate() {
@@ -59,34 +56,19 @@ public class Forecast implements Serializable {
 		this.date = date;
 	}
 
-	public int getIndex() {
-		return index;
+	public Day getDay() {
+		return day;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setDay(Day day) {
+		this.day = day;
 	}
 
-	public int getForcast_id() {
-		return forcast_id;
+	public Night getNight() {
+		return night;
 	}
 
-	public void setForcast_id(int forcast_id) {
-		this.forcast_id = forcast_id;
+	public void setNight(Night night) {
+		this.night = night;
 	}
-
-	public List<DayNight> getDayNightRounds() {
-		return dayNightRounds;
-	}
-
-	public void setDayNightRounds(List<DayNight> dayNightRounds) {
-		this.dayNightRounds = dayNightRounds;
-	}
-
-	@Override
-	public String toString() {
-		return "Forecast [forcast_id=" + forcast_id + ", date=" + date + ", index=" + index + ", dayNightRounds="
-				+ dayNightRounds + "]\n";
-	}
-
 }
