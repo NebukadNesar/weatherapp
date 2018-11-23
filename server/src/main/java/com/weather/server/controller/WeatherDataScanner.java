@@ -48,7 +48,11 @@ public class WeatherDataScanner implements CommandLineRunner {
 		}
 	}
 
-	// arrange the relations before saving database
+	/**
+	 * arrange the relations before saving database
+	 * 
+	 * @param forecasts
+	 */
 	private void rearrangerelations(List<Forecast> forecasts) {
 		forecasts.stream().forEach(forecast -> {
 			if (forecast.getDay() != null) {

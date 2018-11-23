@@ -47,5 +47,4 @@ There ,however, are many bugs in the project:
 
 a ) the database access from api is not effective and is very bad, relational queries should have been added to weatherrepository interface instead of code works
 b ) the static content is not a well desinged web page, just plain html + javascript
-c ) for xml parsing utility class (in utility module), could be used a library instead of writing all the parsing code.
 
