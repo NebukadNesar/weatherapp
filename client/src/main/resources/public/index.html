@@ -1,59 +1,65 @@
 <html>
-   <title>Weather app </title>
-   <body>
-      <style>
-         table {
-         	 border: 2px solid black;
-	         border-collapse: collapse;
-         }
-         table, tr th{
-         	 border: 1px solid black;
-         }
-         table, th{
-         	min-width: 100px;
-         }
-         a.colorful{
-	         color: blue;
-         }
-         .Day{
-         	background: white;
-         }
-         .Night{
-         	background: gray;
-         }
-      </style>
-      <div id="root">
-         <div class="weather-class">
-            <select id="select-date" name="date-select">
-               <option value="all">All</option>
-            </select>
-            <input type="text" name="City name" id="inputfield">
-            <button class="btn btn-lg btn-primary btn-block" onclick="userAction()" type="submit">Get Forecast</button>
-         </div>
-         <div id="city-names">
-         </div>
-         <div class="result">
-            <table id="forecast-result">
-	            <thead>
-	               <tr>
-	                  <th>Day/Night</th>
-	                  <th>description</th>
-	                  <th>peipsi</th>
-	                  <th>phenomenon</th>
-	                  <th>sea</th>
-	                  <th>tempmax</th>
-	                  <th>tempmin</th>
-	                  <th>cityphenomenon</th>
-	                  <th>citytempmin</th>
-	               </tr>
-	            </thead>
-            </table>
-         </div>
-      </div>
+<title>Weather app</title>
+<body>
+	<style>
+table {
+	border: 2px solid black;
+	border-collapse: collapse;
+}
 
-      <!-- javascript part-->
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-      <script type="text/javascript">
+table, tr th {
+	border: 1px solid black;
+}
+
+table, th {
+	min-width: 100px;
+}
+
+a.colorful {
+	color: blue;
+}
+
+.Day {
+	background: white;
+}
+
+.Night {
+	background: gray;
+}
+</style>
+	<div id="root">
+		<div class="weather-class">
+			<select id="select-date" name="date-select">
+				<option value="all">All</option>
+			</select> <input type="text" name="City name" id="inputfield">
+			<button class="btn btn-lg btn-primary btn-block"
+				onclick="userAction()" type="submit">Get Forecast</button>
+		</div>
+		<div id="city-names"></div>
+		<div class="result">
+			<table id="forecast-result">
+				<thead>
+					<tr>
+						<th>Day/Night</th>
+						<th>description</th>
+						<th>peipsi</th>
+						<th>phenomenon</th>
+						<th>sea</th>
+						<th>tempmax</th>
+						<th>tempmin</th>
+						<th>cityphenomenon</th>
+						<th>citytempmin</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+
+	<!-- javascript part-->
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+		type="text/javascript"></script>
+	<script type="text/javascript">
          $(document).ready(function() {
          	populateDateList();
          	populateCityList(); 
@@ -129,31 +135,22 @@
              }
            });
            const respnse = await response.json(); //extract JSON from the http response
+           console.log(respnse);
            displayForecastResultForCity(respnse);
          }
          
          function displayForecastResultForCity(forecast){
          	var forecastObject = document.getElementById("forecast-result");
          	$(".tobedeleted").remove();
-         	for (var i = forecast.dayNightRounds.length - 1; i >= 0; i--) {
-         		var round = forecast.dayNightRounds[i];
-         		var description, 
-         			peipsi,
-         			phenomenon,
-         			sea,
-         			tempmax,
-         			tempmin;
-         
-         		var sun;
-         		if (round.daynight === 1) {
-         			sun = "Day";
-         		}else{
-         			sun = "Night";
-         		}
-         
-         		round.daynight = sun;
-         		forecastObject.append(addInformationRow(round));
-         	}
+       		var day = forecast.pday,
+       			night = forecast.pnight;
+       		
+       		console.log(forecast);
+       		 
+       		day.daynight = "Day";
+       		forecastObject.append(addInformationRow(day));
+       		night.daynight = "Night";
+       		forecastObject.append(addInformationRow(night));
           }
 
          function addInformationRow(round){
@@ -178,9 +175,9 @@
         	 tempmin.innerHTML = round.tempmin;
         	 tempmax.innerHTML = round.tempmax;
         	 
-        	 if(round.cities != undefined && round.cities.length > 0){
-        	 	citytempmin.innerHTML = round.cities[0].tempmin;
-        	 	cityphenomenon.innerHTML = round.cities[0].phenomenon;
+        	 if(round.places != undefined && round.places.length > 0){
+        	 	citytempmin.innerHTML = round.places[0].tempmin;
+        	 	cityphenomenon.innerHTML = round.places[0].phenomenon;
         	 }else{
         	 	citytempmin.innerHTML = "*";
         	 	cityphenomenon.innerHTML = "*"
@@ -199,5 +196,5 @@
         	 return tr;
          }
       </script>
-   </body>
+</body>
 </html>

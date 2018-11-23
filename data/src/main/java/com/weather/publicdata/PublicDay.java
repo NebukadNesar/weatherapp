@@ -20,13 +20,13 @@ public class PublicDay {
 	String peipsi;
 	int daynight; // 1 - day, 0 - night
 
-	List<PublicPlace> cities;
+	List<PublicPlace> places;
 
 	public PublicDay() {
 	}
 
 	public PublicDay(int daynight_id, String phenomenon, int tempmin, int tempmax, String description, String sea,
-			String peipsi, int daynight, List<PublicPlace> cities) {
+			String peipsi, int daynight, List<PublicPlace> places) {
 		super();
 		this.daynight_id = daynight_id;
 		this.phenomenon = phenomenon;
@@ -36,11 +36,11 @@ public class PublicDay {
 		this.sea = sea;
 		this.peipsi = peipsi;
 		this.daynight = daynight;
-		this.cities = cities;
+		this.places = places;
 	}
 
 	public PublicDay(String phenomenon, int tempmin, int tempmax, String description, String sea, String peipsi,
-			List<PublicPlace> cities) {
+			List<PublicPlace> places) {
 		super();
 		this.phenomenon = phenomenon;
 		this.tempmin = tempmin;
@@ -48,7 +48,7 @@ public class PublicDay {
 		this.description = description;
 		this.sea = sea;
 		this.peipsi = peipsi;
-		this.cities = cities;
+		this.places = places;
 	}
 
 	public int getDaynight_id() {
@@ -115,19 +115,19 @@ public class PublicDay {
 		this.daynight = daynight;
 	}
 
-	public List<PublicPlace> getCities() {
-		return cities;
+	public List<PublicPlace> getPlaces() {
+		return places;
 	}
 
-	public void setCities(List<PublicPlace> cities) {
-		this.cities = cities;
+	public void setPlaces(List<PublicPlace> places) {
+		this.places = places;
 	}
 
 	@Override
 	public String toString() {
 		return "PublicDay [daynight_id=" + daynight_id + ", phenomenon=" + phenomenon + ", tempmin=" + tempmin
 				+ ", tempmax=" + tempmax + ", description=" + description + ", sea=" + sea + ", peipsi=" + peipsi
-				+ ", daynight=" + daynight + ", cities=" + cities + "]";
+				+ ", daynight=" + daynight + ", places=" + places + "]";
 	}
 
 }

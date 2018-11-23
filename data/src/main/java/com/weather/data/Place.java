@@ -71,8 +71,7 @@ public class Place implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Place [name=" + name + ", phenomenon=" + phenomenon + ", tempmin=" + tempmin + ", day=" + day
-				+ ", night=" + night + "]";
+		return "Place [name=" + name + ", phenomenon=" + phenomenon + ", tempmin=" + tempmin + "]";
 	}
 
 	public String getName() {

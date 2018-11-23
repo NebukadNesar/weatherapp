@@ -136,7 +136,7 @@ public class Wind implements Serializable {
 	@Override
 	public String toString() {
 		return "Wind [wind_id=" + wind_id + ", name=" + name + ", direction=" + direction + ", speedmin=" + speedmin
-				+ ", speedmax=" + speedmax + ", gust=" + gust + ", night=" + night + ", day=" + day + "]";
+				+ ", speedmax=" + speedmax + ", gust=" + gust +"]";
 	}
 
 }

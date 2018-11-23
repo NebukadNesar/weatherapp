@@ -38,12 +38,22 @@ public class XmlUtility {
 		}
 	}
 
+	/**
+	 * Returns the forecast entities
+	 * 
+	 * @return
+	 */
 	public List<Forecast> getForecasts() {
 		String dataFilePath = getWeatherDataFilePath();
 		List<Forecast> forecasts = generateWeatherDataFromXml(dataFilePath);
 		return forecasts;
 	}
 
+	/**
+	 * Download the weather data and save it into a file fore Jaxb convertions
+	 * 
+	 * @return
+	 */
 	private String getWeatherDataFilePath() {
 		try {
 
@@ -81,6 +91,13 @@ public class XmlUtility {
 		return null;
 	}
 
+	/**
+	 * Generate the related entities objects from the document we have downloaded
+	 * from the Common URL.
+	 * 
+	 * @param dataFilePath
+	 * @return
+	 */
 	private List<Forecast> generateWeatherDataFromXml(String dataFilePath) {
 		File file = new File(dataFilePath);
 		JAXBContext jaxbContext;
